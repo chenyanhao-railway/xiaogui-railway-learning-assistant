@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0d2029">
-  <title>小轨 · 主动学习助手</title>
+  <title>小轨 · 线路工学习助手</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
         <span class="brand-mark" aria-hidden="true">轨</span>
         <span>
           <strong>小轨</strong>
-          <small>主动学习助手</small>
+          <small>线路工学习助手</small>
         </span>
       </a>
       <div class="status">
@@ -28,11 +28,11 @@
 
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">PROACTIVE STUDY COMPANION</p>
-        <h1>不用每次开口问，<br>该提醒时会来找你。</h1>
+        <p class="eyebrow">RAILWAY LINE WORKER LEARNING</p>
+        <h1>把线路工知识，<br>拆成今天能完成的一步。</h1>
         <p class="hero-text">
-          小轨会根据你的学习任务、截止时间和空闲节奏主动说话。
-          默认不连接账号，也不上传你的任务。
+          面向高速铁路施工与维护专业学生，围绕线路巡检、病害整治、
+          起道拨道和冬季作业安全组织学习任务，并在合适时间主动提醒。
         </p>
         <div class="hero-actions">
           <button class="button primary" id="startButton" type="button">启动小轨</button>
@@ -43,7 +43,7 @@
         <div class="signal-ring ring-one"></div>
         <div class="signal-ring ring-two"></div>
         <div class="signal-ring ring-three"></div>
-        <div class="signal-core">小</div>
+        <div class="signal-core">轨</div>
       </div>
     </section>
 
@@ -60,13 +60,13 @@
         <div class="conversation" id="conversation" aria-live="polite">
           <div class="message from-assistant">
             <span class="message-label">小轨</span>
-            <p>点击“启动小轨”后，我会主动提醒。你也可以从“今天先做什么”开始问我。</p>
+            <p>点击“启动小轨”后，我会围绕线路工学习任务主动提醒。你也可以从“今天先学什么”开始问我。</p>
           </div>
         </div>
 
         <form class="chat-form" id="chatForm">
           <label class="sr-only" for="chatInput">给小轨发送消息</label>
-          <input id="chatInput" autocomplete="off" placeholder="例如：今天我该先做什么？">
+          <input id="chatInput" autocomplete="off" placeholder="例如：今天应该先复习哪项线路工知识？">
           <button type="submit">发送</button>
         </form>
         <p class="caption">
@@ -89,7 +89,7 @@
           <form id="taskForm">
             <label>
               任务名称
-              <input id="taskTitle" maxlength="100" required placeholder="例如：完成测量实训记录">
+              <input id="taskTitle" maxlength="100" required placeholder="例如：整理线路巡检观察要点">
             </label>
             <label>
               截止时间
@@ -138,12 +138,13 @@
         </label>
       </div>
       <p class="privacy-note">
-        任务保存在本机。可选的模型接口只由本地服务器读取密钥，密钥不会保存在网页代码中。
+        任务保存在本机。可选模型接口只由本地服务器读取密钥。
+        小轨只用于学习提醒，不能替代课程、正式规章和现场安全判断。
       </p>
     </section>
 
     <footer>
-      <span>小轨 · 可主动说话的学习助手</span>
+      <span>小轨 · 线路工学习助手</span>
       <span>一次只提醒一件事</span>
     </footer>
   </main>

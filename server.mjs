@@ -32,28 +32,28 @@ function defaultState() {
     tasks: [
       {
         id: crypto.randomUUID(),
-        title: "整理高速铁路施工课程笔记",
+        title: "整理线路巡检观察要点",
         dueAt: localDateAt(0, 19, 0),
         priority: "高",
-        notes: "把今天的课堂要点整理成三个问题。",
+        notes: "整理三项观察内容和一个待向老师核实的问题。",
         completed: false,
         createdAt: new Date().toISOString(),
       },
       {
         id: crypto.randomUUID(),
-        title: "练习 WPS 函数 SUM、COUNTIF、IF",
+        title: "复习起道拨道与线路平顺",
         dueAt: localDateAt(1, 20, 0),
         priority: "中",
-        notes: "每个函数至少独立完成一次。",
+        notes: "用自己的话解释术语，并标注资料来源。",
         completed: false,
         createdAt: new Date().toISOString(),
       },
       {
         id: crypto.randomUUID(),
-        title: "完成入团申请书誊写",
+        title: "整理冬季钢轨脆断风险卡",
         dueAt: localDateAt(2, 12, 0),
         priority: "高",
-        notes: "检查姓名、班级、日期和红稿纸要求。",
+        notes: "记录零下30度作业的穿戴要求和安全边界。",
         completed: false,
         createdAt: new Date().toISOString(),
       },
@@ -146,19 +146,31 @@ function localReply(message, tasks) {
   if (!normalized) return "你可以告诉我今天想完成什么。";
 
   if (/你好|在吗|小轨/.test(normalized)) {
-    return `我在。${taskSummary(tasks)} 你想先从哪一项开始？`;
+    return `我在。${taskSummary(tasks)} 你想先复习哪一项线路工知识？`;
   }
   if (/今天|任务|待办|安排|做什么/.test(normalized)) {
     const next = orderedPending(tasks)[0];
     return next
-      ? `${taskSummary(tasks)} 建议先做“${next.title}”，只推进一个最小步骤。`
-      : "今天没有未完成任务。可以安排一次复盘，或者给自己留一点休息时间。";
+      ? `${taskSummary(tasks)} 建议先做“${next.title}”，只推进一个可检查的小步骤。`
+      : "今天没有未完成任务。可以完成一次线路工知识复盘，或者添加一个新的学习目标。";
   }
   if (/完成|做完|搞定/.test(normalized)) {
     return "完成后记得在任务列表中勾选，我会根据最新进度调整下一次提醒。";
   }
   if (/提醒|主动|联系我/.test(normalized)) {
     return "我会在页面保持打开时主动提醒。你可以设置提醒间隔和免打扰时段，我不会在静默时段说话。";
+  }
+  if (/巡检|线路检查/.test(normalized)) {
+    return "线路巡检学习先关注线路几何、连接零件、轨枕、道床和周边环境是否异常。发现异常时先记录、复核并上报；本工具不替代现场作业规程和教师判断。";
+  }
+  if (/冬季|脆断|零下|防寒/.test(normalized)) {
+    return "访谈中提到的冬季重点是零下30度环境下的钢轨脆断风险，以及安全绳、防寒鞋、手套规范穿戴。正式要求必须以学校、企业和现行规章为准，小轨只帮助复习，不提供现场作业指令。";
+  }
+  if (/起道|拨道|轨枕|道岔/.test(normalized)) {
+    return "起道拨道、更换伤损轨枕和更换道岔都属于线路养护维修任务。当前版本帮助你理解任务名称、风险点和学习差距，不生成现场施工步骤。";
+  }
+  if (/AI|模型|大模型/.test(normalized)) {
+    return "小轨适合整理学习资料、生成复习问题和安排任务，但模型可能出错。涉及铁路安全和作业规范的内容，必须回到正式文件并向教师确认。";
   }
   if (/不会|不懂|难|卡住/.test(normalized)) {
     return "先不要一次解决整道题。把卡住的位置写成一个具体问题，例如“哪一步不会”“输入和预期结果分别是什么”，我可以陪你拆开。";
@@ -189,7 +201,7 @@ async function modelReply(message, tasks) {
         {
           role: "system",
           content:
-            "你是小轨，一名克制、具体、尊重隐私的学习助手。回答用自然中文，优先给出一个可执行的下一步。不要编造用户经历，不要连续说教。用户待办如下：" +
+            "你是小轨，一名面向高速铁路线路工学习者的学习助手。回答用自然中文，优先给出一个可执行的学习步骤。不要编造用户经历，不要替代正式作业规程、课程或教师判断，不生成危险作业指令。用户待办如下：" +
             JSON.stringify(tasks),
         },
         { role: "user", content: cleanText(message, 2000) },
