@@ -375,6 +375,30 @@ h1 {
   font-weight: 700;
 }
 
+.quick-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.quick-prompts button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--steel);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quick-prompts button:hover,
+.quick-prompts button:focus-visible {
+  border-color: var(--steel);
+  background: var(--soft);
+}
+
 .caption,
 .privacy-note {
   margin: 11px 0 0;
@@ -483,6 +507,69 @@ h1 {
   background: rgba(255, 255, 255, 0.58);
 }
 
+.knowledge {
+  margin-top: 22px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.knowledge-head {
+  max-width: 780px;
+}
+
+.knowledge-head h2 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.25;
+}
+
+.knowledge-head > p:last-child {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.knowledge-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: white;
+}
+
+.knowledge-card summary {
+  padding: 16px 18px;
+  font-size: 16px;
+  font-weight: 800;
+  list-style: none;
+}
+
+.knowledge-card summary::after {
+  content: "+";
+  float: right;
+  color: var(--orange);
+}
+
+.knowledge-card[open] summary::after {
+  content: "−";
+}
+
+.knowledge-card p {
+  margin: 0;
+  padding: 0 18px 18px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
 .setting-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -564,7 +651,8 @@ footer {
 @media (max-width: 900px) {
   .hero,
   .dashboard,
-  .settings {
+  .settings,
+  .knowledge-grid {
     grid-template-columns: 1fr;
   }
 

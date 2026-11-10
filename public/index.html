@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0d2029">
   <title>小轨 · 线路工学习助手</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -69,6 +70,11 @@
           <input id="chatInput" autocomplete="off" placeholder="例如：今天应该先复习哪项线路工知识？">
           <button type="submit">发送</button>
         </form>
+        <div class="quick-prompts" aria-label="快捷提问">
+          <button type="button" data-prompt="今天应该先复习哪项线路工知识？">今天先学什么</button>
+          <button type="button" data-prompt="线路巡检需要重点关注什么？">巡检要点</button>
+          <button type="button" data-prompt="冬季钢轨脆断风险怎么复习？">冬季风险</button>
+        </div>
         <p class="caption">
           页面保持打开时，浏览器才能主动语音播报。浏览器通常会拦截未交互页面的自动播放。
         </p>
@@ -107,6 +113,32 @@
           </form>
         </details>
       </article>
+    </section>
+
+    <section class="knowledge" aria-labelledby="knowledge-title">
+      <div class="knowledge-head">
+        <p class="panel-kicker">线路工学习卡</p>
+        <h2 id="knowledge-title">把岗位词汇变成可复习的问题</h2>
+        <p>以下内容用于课程复习和访谈整理，不替代正式规章、现场培训或教师判断。</p>
+      </div>
+      <div class="knowledge-grid">
+        <details class="knowledge-card">
+          <summary>线路巡检先看什么</summary>
+          <p>围绕线路几何、连接零件、轨枕、道床和线路周边环境建立观察清单。发现异常时先记录、复核和上报，不擅自给出处置结论。</p>
+        </details>
+        <details class="knowledge-card">
+          <summary>起道拨道是什么</summary>
+          <p>起道拨道是线路养护维修中的任务名称，目标是调整轨道位置、恢复线路平顺。学习时先弄懂术语、目的和风险，不把AI生成内容当作施工步骤。</p>
+        </details>
+        <details class="knowledge-card">
+          <summary>轨枕与道岔为什么要更换</summary>
+          <p>访谈提到要更换伤损轨枕和道岔。复习时重点理解设备状态、病害识别、团队协作和安全记录，具体判定标准回到课程与现行规范。</p>
+        </details>
+        <details class="knowledge-card">
+          <summary>冬季作业的安全底线</summary>
+          <p>黑龙江冬季可达零下30度，访谈特别提到钢轨脆断风险。安全绳、防寒鞋和手套必须按规范穿戴，作业中不能把手揣兜。</p>
+        </details>
+      </div>
     </section>
 
     <section class="settings" aria-labelledby="settings-title">

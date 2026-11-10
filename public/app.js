@@ -18,6 +18,8 @@ const elements = {
   voiceSetting: document.querySelector("#voiceSetting"),
   modeBadge: document.querySelector("#modeBadge"),
   signal: document.querySelector(".signal"),
+  quickPrompts: document.querySelectorAll("[data-prompt]"),
+  knowledgeCards: document.querySelectorAll(".knowledge-card"),
 };
 
 const storageKey = "xiaogui-settings-v1";
@@ -327,6 +329,22 @@ elements.chatForm.addEventListener("submit", (event) => {
   const message = elements.chatInput.value.trim();
   if (message) ask(message);
 });
+
+for (const button of elements.quickPrompts) {
+  button.addEventListener("click", () => {
+    const message = button.dataset.prompt?.trim();
+    if (message) ask(message);
+  });
+}
+
+for (const card of elements.knowledgeCards) {
+  card.addEventListener("toggle", () => {
+    if (!card.open) return;
+    for (const other of elements.knowledgeCards) {
+      if (other !== card) other.open = false;
+    }
+  });
+}
 
 elements.intervalSetting.addEventListener("change", () => {
   settings.intervalMinutes = Number(elements.intervalSetting.value);
