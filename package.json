@@ -1,0 +1,14 @@
+{
+  "name": "xiaogui-railway-learning-assistant",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "面向高速铁路施工与维护专业学生的线路工学习提醒工具",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test/smoke.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
