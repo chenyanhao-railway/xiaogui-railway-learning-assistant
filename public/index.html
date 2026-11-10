@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d2029">
+  <title>小轨 · 主动学习助手</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="小轨首页">
+        <span class="brand-mark" aria-hidden="true">轨</span>
+        <span>
+          <strong>小轨</strong>
+          <small>主动学习助手</small>
+        </span>
+      </a>
+      <div class="status">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">尚未启动</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">PROACTIVE STUDY COMPANION</p>
+        <h1>不用每次开口问，<br>该提醒时会来找你。</h1>
+        <p class="hero-text">
+          小轨会根据你的学习任务、截止时间和空闲节奏主动说话。
+          默认不连接账号，也不上传你的任务。
+        </p>
+        <div class="hero-actions">
+          <button class="button primary" id="startButton" type="button">启动小轨</button>
+          <button class="button quiet" id="pauseButton" type="button" aria-pressed="false">暂停主动提醒</button>
+        </div>
+      </div>
+      <div class="signal" aria-hidden="true">
+        <div class="signal-ring ring-one"></div>
+        <div class="signal-ring ring-two"></div>
+        <div class="signal-ring ring-three"></div>
+        <div class="signal-core">小</div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <article class="panel conversation-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">对话</p>
+            <h2>现在在想什么</h2>
+          </div>
+          <span class="mode-badge" id="modeBadge">本地模式</span>
+        </div>
+
+        <div class="conversation" id="conversation" aria-live="polite">
+          <div class="message from-assistant">
+            <span class="message-label">小轨</span>
+            <p>点击“启动小轨”后，我会主动提醒。你也可以从“今天先做什么”开始问我。</p>
+          </div>
+        </div>
+
+        <form class="chat-form" id="chatForm">
+          <label class="sr-only" for="chatInput">给小轨发送消息</label>
+          <input id="chatInput" autocomplete="off" placeholder="例如：今天我该先做什么？">
+          <button type="submit">发送</button>
+        </form>
+        <p class="caption">
+          页面保持打开时，浏览器才能主动语音播报。浏览器通常会拦截未交互页面的自动播放。
+        </p>
+      </article>
+
+      <article class="panel tasks-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">学习任务</p>
+            <h2>接下来做什么</h2>
+          </div>
+          <span class="task-count" id="taskCount">0 项</span>
+        </div>
+        <div class="task-list" id="taskList"></div>
+
+        <details class="task-create">
+          <summary>添加任务</summary>
+          <form id="taskForm">
+            <label>
+              任务名称
+              <input id="taskTitle" maxlength="100" required placeholder="例如：完成测量实训记录">
+            </label>
+            <label>
+              截止时间
+              <input id="taskDue" type="datetime-local">
+            </label>
+            <label>
+              优先级
+              <select id="taskPriority">
+                <option>高</option>
+                <option selected>中</option>
+                <option>低</option>
+              </select>
+            </label>
+            <button type="submit">加入计划</button>
+          </form>
+        </details>
+      </article>
+    </section>
+
+    <section class="settings" aria-labelledby="settings-title">
+      <div>
+        <p class="panel-kicker">提醒规则</p>
+        <h2 id="settings-title">让它主动，但有分寸</h2>
+      </div>
+      <div class="setting-grid">
+        <label class="setting">
+          <span>提醒间隔</span>
+          <select id="intervalSetting">
+            <option value="15">每 15 分钟</option>
+            <option value="30" selected>每 30 分钟</option>
+            <option value="60">每 60 分钟</option>
+          </select>
+        </label>
+        <label class="setting">
+          <span>免打扰开始</span>
+          <input id="quietStart" type="time" value="23:00">
+        </label>
+        <label class="setting">
+          <span>免打扰结束</span>
+          <input id="quietEnd" type="time" value="07:00">
+        </label>
+        <label class="setting toggle-setting">
+          <span>语音播报</span>
+          <input id="voiceSetting" type="checkbox" checked>
+          <span class="toggle" aria-hidden="true"></span>
+        </label>
+      </div>
+      <p class="privacy-note">
+        任务保存在本机。可选的模型接口只由本地服务器读取密钥，密钥不会保存在网页代码中。
+      </p>
+    </section>
+
+    <footer>
+      <span>小轨 · 可主动说话的学习助手</span>
+      <span>一次只提醒一件事</span>
+    </footer>
+  </main>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
