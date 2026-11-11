@@ -562,12 +562,228 @@ h1 {
   content: "−";
 }
 
-.knowledge-card p {
-  margin: 0;
+.knowledge-copy {
   padding: 0 18px 18px;
+}
+
+.knowledge-copy p {
+  margin: 0;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.75;
+}
+
+.knowledge-action {
+  margin-top: 12px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--steel);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.knowledge-action:hover,
+.knowledge-action:focus-visible {
+  border-color: var(--steel);
+  background: var(--soft);
+}
+
+.review-board {
+  display: grid;
+  grid-template-columns: 0.72fr 1.28fr;
+  gap: 18px;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 18px;
+  background: var(--ink);
+  color: white;
+}
+
+.review-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  grid-column: 1 / -1;
+}
+
+.review-head h3 {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.35;
+}
+
+.review-head .panel-kicker {
+  color: #efb17f;
+}
+
+.review-window {
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: #cbd8dd;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.review-metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.review-metrics div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.review-metrics strong {
+  color: #efb17f;
+  font-size: 27px;
+  line-height: 1;
+}
+
+.review-metrics span {
+  color: #cbd8dd;
+  font-size: 12px;
+}
+
+.question-block {
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.question-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.question-head h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.question-head span,
+.question-hint {
+  color: #adc0c7;
+  font-size: 12px;
+}
+
+.question-hint {
+  margin: 7px 0 0;
+  line-height: 1.6;
+}
+
+.question-list {
+  display: grid;
+  gap: 8px;
+  max-height: 170px;
+  margin-top: 13px;
+  overflow-y: auto;
+}
+
+.question-empty {
+  margin: 0;
+  color: #adc0c7;
+  font-size: 12px;
+}
+
+.question-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.question-item:first-child {
+  border-top: 0;
+}
+
+.question-item p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.question-item small {
+  display: block;
+  margin-top: 4px;
+  color: #9fb4bb;
+  font-size: 11px;
+}
+
+.question-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.question-actions button {
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  color: #dbe6e9;
+  font-size: 11px;
+}
+
+.question-actions button:hover,
+.question-actions button:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.question-item.verified {
+  opacity: 0.72;
+}
+
+.question-item.verified p {
+  text-decoration: line-through;
+}
+
+.question-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.question-form input {
+  min-width: 0;
+  min-height: 38px;
+  padding: 0 11px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.question-form input::placeholder {
+  color: #9fb4bb;
+}
+
+.question-form button {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--orange);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .setting-grid {
@@ -652,6 +868,7 @@ footer {
   .hero,
   .dashboard,
   .settings,
+  .review-board,
   .knowledge-grid {
     grid-template-columns: 1fr;
   }
@@ -681,6 +898,10 @@ footer {
   }
 
   .setting-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .question-item {
     grid-template-columns: 1fr;
   }
 

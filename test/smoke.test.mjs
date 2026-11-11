@@ -49,6 +49,8 @@ test("task API and local railway learning replies", async (t) => {
   const state = await stateResponse.json();
   assert.ok(Array.isArray(state.tasks));
   assert.ok(state.tasks.length >= 3);
+  assert.ok(Array.isArray(state.knowledgeQuestions));
+  assert.ok(state.knowledgeQuestions.length >= 2);
 
   const createResponse = await fetch(`${BASE_URL}/api/tasks`, {
     method: "POST",
@@ -68,7 +70,31 @@ test("task API and local railway learning replies", async (t) => {
     body: JSON.stringify({ completed: true }),
   });
   assert.equal(completeResponse.status, 200);
-  assert.equal((await completeResponse.json()).completed, true);
+  const completed = await completeResponse.json();
+  assert.equal(completed.completed, true);
+  assert.ok(completed.completedAt);
+
+  const questionResponse = await fetch(`${BASE_URL}/api/questions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      text: "测试：这项线路工知识的正式来源是什么？",
+      source: "自动测试",
+    }),
+  });
+  assert.equal(questionResponse.status, 201);
+  const question = await questionResponse.json();
+  assert.equal(question.verified, false);
+
+  const verifyResponse = await fetch(`${BASE_URL}/api/questions/${question.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ verified: true }),
+  });
+  assert.equal(verifyResponse.status, 200);
+  const verified = await verifyResponse.json();
+  assert.equal(verified.verified, true);
+  assert.ok(verified.verifiedAt);
 
   const chatResponse = await fetch(`${BASE_URL}/api/chat`, {
     method: "POST",

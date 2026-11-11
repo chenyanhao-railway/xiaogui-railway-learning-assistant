@@ -20,6 +20,13 @@ const elements = {
   signal: document.querySelector(".signal"),
   quickPrompts: document.querySelectorAll("[data-prompt]"),
   knowledgeCards: document.querySelectorAll(".knowledge-card"),
+  weekCompleted: document.querySelector("#weekCompleted"),
+  weekPending: document.querySelector("#weekPending"),
+  weekQuestions: document.querySelector("#weekQuestions"),
+  questionCount: document.querySelector("#questionCount"),
+  questionList: document.querySelector("#questionList"),
+  questionForm: document.querySelector("#questionForm"),
+  questionInput: document.querySelector("#questionInput"),
 };
 
 const storageKey = "xiaogui-settings-v1";
@@ -31,6 +38,7 @@ const defaultSettings = {
 };
 
 let tasks = [];
+let knowledgeQuestions = [];
 let settings = loadSettings();
 let started = false;
 let paused = false;
@@ -141,6 +149,69 @@ function renderTasks() {
     empty.textContent = "还没有任务。先添加一个今天能完成的小目标。";
     elements.taskList.append(empty);
   }
+  renderReview();
+}
+
+function renderReview() {
+  const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const completedThisWeek = tasks.filter((task) => {
+    if (!task.completed || !task.completedAt) return false;
+    return new Date(task.completedAt).getTime() >= sevenDaysAgo;
+  }).length;
+  const pending = tasks.filter((task) => !task.completed).length;
+  const unresolved = knowledgeQuestions.filter((question) => !question.verified).length;
+  elements.weekCompleted.textContent = String(completedThisWeek);
+  elements.weekPending.textContent = String(pending);
+  elements.weekQuestions.textContent = String(unresolved);
+}
+
+function renderQuestions() {
+  elements.questionList.replaceChildren();
+  const ordered = [...knowledgeQuestions].sort(
+    (a, b) => Number(a.verified) - Number(b.verified),
+  );
+  elements.questionCount.textContent = `${
+    knowledgeQuestions.filter((question) => !question.verified).length
+  } 项待核实`;
+
+  for (const question of ordered) {
+    const item = document.createElement("div");
+    item.className = `question-item${question.verified ? " verified" : ""}`;
+
+    const copy = document.createElement("div");
+    const text = document.createElement("p");
+    text.textContent = question.text;
+    const source = document.createElement("small");
+    source.textContent = `${question.source} · ${
+      question.verified ? "已核实" : "待向老师或正式资料核实"
+    }`;
+    copy.append(text, source);
+
+    const actions = document.createElement("div");
+    actions.className = "question-actions";
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.textContent = question.verified ? "转回待核实" : "标记已核实";
+    toggle.addEventListener("click", () => {
+      toggleQuestion(question, !question.verified);
+    });
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = "删除";
+    remove.addEventListener("click", () => removeQuestion(question.id));
+    actions.append(toggle, remove);
+
+    item.append(copy, actions);
+    elements.questionList.append(item);
+  }
+
+  if (ordered.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "question-empty";
+    empty.textContent = "还没有记录。遇到没把握的知识，先把它留在这里。";
+    elements.questionList.append(empty);
+  }
+  renderReview();
 }
 
 async function loadTasks() {
@@ -148,7 +219,9 @@ async function loadTasks() {
   if (!response.ok) throw new Error("无法读取任务");
   const state = await response.json();
   tasks = state.tasks || [];
+  knowledgeQuestions = state.knowledgeQuestions || [];
   renderTasks();
+  renderQuestions();
 }
 
 async function toggleTask(task, completed) {
@@ -200,6 +273,53 @@ async function removeTask(id) {
   if (!response.ok) return;
   tasks = tasks.filter((task) => task.id !== id);
   renderTasks();
+}
+
+async function addQuestion(text, source = "手动添加") {
+  const normalized = text.trim();
+  if (!normalized) return null;
+  const duplicate = knowledgeQuestions.find(
+    (question) => !question.verified && question.text === normalized,
+  );
+  if (duplicate) {
+    addMessage("assistant", "这个问题已经在待核实清单里，完成核实后再标记即可。");
+    return duplicate;
+  }
+  const response = await fetch("/api/questions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: normalized, source }),
+  });
+  if (!response.ok) {
+    addMessage("assistant", "问题没有保存成功，请稍后再试。");
+    return null;
+  }
+  const question = await response.json();
+  knowledgeQuestions.unshift(question);
+  renderQuestions();
+  addMessage("assistant", `已记下待核实问题：${question.text}`);
+  return question;
+}
+
+async function toggleQuestion(question, verified) {
+  const response = await fetch(`/api/questions/${question.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ verified }),
+  });
+  if (!response.ok) return;
+  const updated = await response.json();
+  knowledgeQuestions = knowledgeQuestions.map((item) =>
+    item.id === updated.id ? updated : item,
+  );
+  renderQuestions();
+}
+
+async function removeQuestion(id) {
+  const response = await fetch(`/api/questions/${id}`, { method: "DELETE" });
+  if (!response.ok) return;
+  knowledgeQuestions = knowledgeQuestions.filter((question) => question.id !== id);
+  renderQuestions();
 }
 
 function addMessage(role, text) {
@@ -345,6 +465,24 @@ for (const card of elements.knowledgeCards) {
     }
   });
 }
+
+for (const button of document.querySelectorAll(".knowledge-action")) {
+  button.addEventListener("click", () => {
+    const card = button.closest(".knowledge-card");
+    const question = card?.dataset.question;
+    const source = card?.querySelector("summary")?.textContent?.trim() || "学习卡";
+    if (question) addQuestion(question, source);
+  });
+}
+
+elements.questionForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const text = elements.questionInput.value.trim();
+  if (!text) return;
+  addQuestion(text).then((question) => {
+    if (question) elements.questionForm.reset();
+  });
+});
 
 elements.intervalSetting.addEventListener("change", () => {
   settings.intervalMinutes = Number(elements.intervalSetting.value);

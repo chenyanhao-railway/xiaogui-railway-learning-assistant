@@ -27,6 +27,27 @@ function localDateAt(daysFromToday, hour, minute = 0) {
   return date.toISOString();
 }
 
+function defaultKnowledgeQuestions() {
+  return [
+    {
+      id: crypto.randomUUID(),
+      text: "线路巡检记录中，哪些信息需要向老师核实？",
+      source: "线路巡检学习卡",
+      verified: false,
+      createdAt: new Date().toISOString(),
+      verifiedAt: null,
+    },
+    {
+      id: crypto.randomUUID(),
+      text: "冬季作业穿戴要求的正式文件来源是什么？",
+      source: "冬季作业学习卡",
+      verified: false,
+      createdAt: new Date().toISOString(),
+      verifiedAt: null,
+    },
+  ];
+}
+
 function defaultState() {
   return {
     tasks: [
@@ -58,12 +79,22 @@ function defaultState() {
         createdAt: new Date().toISOString(),
       },
     ],
+    knowledgeQuestions: defaultKnowledgeQuestions(),
   };
+}
+
+function normalizeState(value) {
+  const state = value && typeof value === "object" ? value : {};
+  if (!Array.isArray(state.tasks)) state.tasks = [];
+  if (!Array.isArray(state.knowledgeQuestions)) {
+    state.knowledgeQuestions = defaultKnowledgeQuestions();
+  }
+  return state;
 }
 
 async function readState() {
   try {
-    return JSON.parse(await fs.readFile(DATA_FILE, "utf8"));
+    return normalizeState(JSON.parse(await fs.readFile(DATA_FILE, "utf8")));
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
     const initial = defaultState();
@@ -247,7 +278,10 @@ async function handleApi(request, response, url) {
     const state = await readState();
     const task = state.tasks.find((item) => item.id === taskMatch[1]);
     if (!task) return sendJson(response, 404, { error: "任务不存在" });
-    if (typeof body.completed === "boolean") task.completed = body.completed;
+    if (typeof body.completed === "boolean") {
+      task.completed = body.completed;
+      task.completedAt = body.completed ? new Date().toISOString() : null;
+    }
     if (typeof body.title === "string" && cleanText(body.title, 100)) {
       task.title = cleanText(body.title, 100);
     }
@@ -260,6 +294,54 @@ async function handleApi(request, response, url) {
     const index = state.tasks.findIndex((item) => item.id === taskMatch[1]);
     if (index < 0) return sendJson(response, 404, { error: "任务不存在" });
     state.tasks.splice(index, 1);
+    await writeState(state);
+    return sendJson(response, 200, { ok: true });
+  }
+
+  if (url.pathname === "/api/questions" && request.method === "POST") {
+    const body = await readJsonBody(request);
+    const text = cleanText(body.text, 200);
+    if (!text) return sendJson(response, 400, { error: "待核实问题不能为空" });
+    const state = await readState();
+    const question = {
+      id: crypto.randomUUID(),
+      text,
+      source: cleanText(body.source, 60) || "手动添加",
+      verified: false,
+      createdAt: new Date().toISOString(),
+      verifiedAt: null,
+    };
+    state.knowledgeQuestions.unshift(question);
+    await writeState(state);
+    return sendJson(response, 201, question);
+  }
+
+  const questionMatch = url.pathname.match(/^\/api\/questions\/([^/]+)$/);
+  if (questionMatch && request.method === "PATCH") {
+    const body = await readJsonBody(request);
+    if (typeof body.verified !== "boolean") {
+      return sendJson(response, 400, { error: "verified 必须是布尔值" });
+    }
+    const state = await readState();
+    const question = state.knowledgeQuestions.find(
+      (item) => item.id === questionMatch[1],
+    );
+    if (!question) return sendJson(response, 404, { error: "待核实问题不存在" });
+    question.verified = body.verified;
+    question.verifiedAt = body.verified ? new Date().toISOString() : null;
+    await writeState(state);
+    return sendJson(response, 200, question);
+  }
+
+  if (questionMatch && request.method === "DELETE") {
+    const state = await readState();
+    const index = state.knowledgeQuestions.findIndex(
+      (item) => item.id === questionMatch[1],
+    );
+    if (index < 0) {
+      return sendJson(response, 404, { error: "待核实问题不存在" });
+    }
+    state.knowledgeQuestions.splice(index, 1);
     await writeState(state);
     return sendJson(response, 200, { ok: true });
   }

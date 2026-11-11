@@ -122,22 +122,74 @@
         <p>以下内容用于课程复习和访谈整理，不替代正式规章、现场培训或教师判断。</p>
       </div>
       <div class="knowledge-grid">
-        <details class="knowledge-card">
+        <details class="knowledge-card" data-question="线路巡检记录中，哪些信息需要向老师核实？">
           <summary>线路巡检先看什么</summary>
-          <p>围绕线路几何、连接零件、轨枕、道床和线路周边环境建立观察清单。发现异常时先记录、复核和上报，不擅自给出处置结论。</p>
+          <div class="knowledge-copy">
+            <p>围绕线路几何、连接零件、轨枕、道床和线路周边环境建立观察清单。发现异常时先记录、复核和上报，不擅自给出处置结论。</p>
+            <button class="knowledge-action" type="button">加入待核实</button>
+          </div>
         </details>
-        <details class="knowledge-card">
+        <details class="knowledge-card" data-question="起道拨道的学习目标和风险边界应该怎样表述？">
           <summary>起道拨道是什么</summary>
-          <p>起道拨道是线路养护维修中的任务名称，目标是调整轨道位置、恢复线路平顺。学习时先弄懂术语、目的和风险，不把AI生成内容当作施工步骤。</p>
+          <div class="knowledge-copy">
+            <p>起道拨道是线路养护维修中的任务名称，目标是调整轨道位置、恢复线路平顺。学习时先弄懂术语、目的和风险，不把AI生成内容当作施工步骤。</p>
+            <button class="knowledge-action" type="button">加入待核实</button>
+          </div>
         </details>
-        <details class="knowledge-card">
+        <details class="knowledge-card" data-question="伤损轨枕和道岔的判定标准应查阅哪份正式资料？">
           <summary>轨枕与道岔为什么要更换</summary>
-          <p>访谈提到要更换伤损轨枕和道岔。复习时重点理解设备状态、病害识别、团队协作和安全记录，具体判定标准回到课程与现行规范。</p>
+          <div class="knowledge-copy">
+            <p>访谈提到要更换伤损轨枕和道岔。复习时重点理解设备状态、病害识别、团队协作和安全记录，具体判定标准回到课程与现行规范。</p>
+            <button class="knowledge-action" type="button">加入待核实</button>
+          </div>
         </details>
-        <details class="knowledge-card">
+        <details class="knowledge-card" data-question="冬季作业穿戴要求的正式文件来源是什么？">
           <summary>冬季作业的安全底线</summary>
-          <p>黑龙江冬季可达零下30度，访谈特别提到钢轨脆断风险。安全绳、防寒鞋和手套必须按规范穿戴，作业中不能把手揣兜。</p>
+          <div class="knowledge-copy">
+            <p>黑龙江冬季可达零下30度，访谈特别提到钢轨脆断风险。安全绳、防寒鞋和手套必须按规范穿戴，作业中不能把手揣兜。</p>
+            <button class="knowledge-action" type="button">加入待核实</button>
+          </div>
         </details>
+      </div>
+
+      <div class="review-board">
+        <div class="review-head">
+          <div>
+            <p class="panel-kicker">学习复盘</p>
+            <h3>把“好像会了”变成可检查的进度</h3>
+          </div>
+          <span class="review-window">近 7 天</span>
+        </div>
+        <div class="review-metrics">
+          <div>
+            <strong id="weekCompleted">0</strong>
+            <span>已完成任务</span>
+          </div>
+          <div>
+            <strong id="weekPending">0</strong>
+            <span>待完成任务</span>
+          </div>
+          <div>
+            <strong id="weekQuestions">0</strong>
+            <span>待核实知识</span>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-head">
+            <h4>待核实知识</h4>
+            <span id="questionCount">0 项待核实</span>
+          </div>
+          <p class="question-hint">
+            遇到没把握的术语或规范，先记下来，再向课程、正式文件和老师核实。
+          </p>
+          <div class="question-list" id="questionList"></div>
+          <form class="question-form" id="questionForm">
+            <label class="sr-only" for="questionInput">添加待核实问题</label>
+            <input id="questionInput" maxlength="200" placeholder="例如：这项规定的正式来源是什么？" required>
+            <button type="submit">记下问题</button>
+          </form>
+        </div>
       </div>
     </section>
 
